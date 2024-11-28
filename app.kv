@@ -1,0 +1,117 @@
+<MyScreenManager>:
+    ChatbotScreen:
+    InicioScreen:
+    RegistroScreen:
+    LoginScreen:
+    HistorialScreen:
+
+<ChatbotScreen>:
+    name: 'chatbot'
+    BoxLayout:
+        orientation: 'vertical'
+        spacing: dp(10)
+        padding: dp(10)
+        RecycleView:
+            id: rv_chat
+            viewclass: 'MessageItem'
+            RecycleBoxLayout:
+                orientation: 'vertical'
+                size_hint_y: None
+                height: self.minimum_height
+                default_size: None, dp(70)
+                default_size_hint: 1, None
+        BoxLayout:
+            size_hint_y: None
+            height: dp(50)
+            spacing: dp(10)
+            TextInput:
+                id: user_input
+                hint_text: 'Escribe tu mensaje aquí...'
+                multiline: False
+                on_text_validate: root.enviar_mensaje()
+            Button:
+                text: 'Enviar'
+                size_hint_x: None
+                width: dp(80)
+                on_press: root.enviar_mensaje()
+
+<MensajeItem@BoxLayout>:
+    texto: ''
+    size_hint_y: None
+    height: dp(70)
+    padding: dp(10)
+    Label:
+        text: root.texto
+        text_size: self.width, None
+        size_hint_y: None
+        height: self.texture_size[1]
+
+<InicioScreen>:
+    name: 'inicio'
+    BoxLayout:
+        orientation: 'vertical'
+        padding: dp(50)
+        spacing: dp(10)
+        Button:
+            text: 'Ir a Chatbot'
+            on_press: root.ir_a_chatbot()
+        Button:
+            text: 'Ir a Registro'
+            on_press: root.ir_a_registro()
+
+<RegistroScreen>:
+    name: 'registro'
+    BoxLayout:
+        orientation: 'vertical'
+        padding: dp(50)
+        spacing: dp(10)
+        Label:
+            text: 'Formulario de Registro'
+        TextInput:
+            hint_text: 'Nombre de Usuario'
+        TextInput:
+            hint_text: 'Correo'
+        TextInput:
+            hint_text: 'Contraseña'
+            password: True
+        Button:
+            text: 'Registrar'
+            on_press: root.registrar_usuario()
+
+<LoginScreen>:
+    name: 'login'
+    BoxLayout:
+        orientation: 'vertical'
+        padding: dp(50)
+        spacing: dp(10)
+        Label:
+            text: 'Iniciar Sesión'
+        TextInput:
+            hint_text: 'Correo o Nombre de Usuario'
+        TextInput:
+            hint_text: 'Contraseña'
+            password: True
+        Button:
+            text: 'Iniciar sesión'
+            on_press: root.iniciar_sesion()
+
+<HistorialScreen>:
+    name: 'historial'
+    BoxLayout:
+        orientation: 'vertical'
+        padding: dp(50)
+        spacing: dp(10)
+        Label:
+            text: 'Historial de Chats'
+        Button:
+            text: 'Ir a Chatbot'
+            on_press: root.ir_a_chatbot()
+
+# Agregar las pantallas al ScreenManager en la clase principal.
+<MyScreenManager>:
+    InicioScreen:
+    ChatbotScreen:
+    RegistroScreen:
+    LoginScreen:
+    HistorialScreen:
+
