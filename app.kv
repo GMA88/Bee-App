@@ -1,117 +1,77 @@
-<MyScreenManager>:
-    ChatbotScreen:
-    InicioScreen:
-    RegistroScreen:
-    LoginScreen:
-    HistorialScreen:
-
-<ChatbotScreen>:
-    name: 'chatbot'
+<InicioScreen>:
     BoxLayout:
         orientation: 'vertical'
-        spacing: dp(10)
-        padding: dp(10)
-        RecycleView:
-            id: rv_chat
-            viewclass: 'MessageItem'
-            RecycleBoxLayout:
+        spacing: 20
+        padding: [20, 100, 20, 100]
+        
+        Label:
+            text: "Bienvenido"
+            font_size: '24sp'
+            size_hint_y: None
+            height: 60
+
+        Button:
+            text: "Ir a Malla Curricular"
+            size_hint: None, None
+            size: 250, 60
+            on_release:
+                app.root.current = 'malla_curricular'
+
+<MallaCurricularScreen>:
+    BoxLayout:
+        orientation: 'vertical'
+        spacing: 20
+        padding: [20, 20, 20, 20]
+
+        Label:
+            text: "Malla Curricular"
+            font_size: '24sp'
+            size_hint_y: None
+            height: 50
+
+        ScrollView:
+            size_hint: (1, 1)
+            BoxLayout:
+                id: materias_layout
                 orientation: 'vertical'
                 size_hint_y: None
                 height: self.minimum_height
-                default_size: None, dp(70)
-                default_size_hint: 1, None
-        BoxLayout:
+                spacing: 10
+                padding: [10, 10]
+
+        Button:
+            text: "Salir"
+            size_hint: None, None
+            size: 200, 50
+            on_release:
+                app.root.current = 'inicio'
+
+<TemarioScreen>:
+    BoxLayout:
+        orientation: 'vertical'
+        spacing: 20
+        padding: [20, 20, 20, 20]
+
+        Label:
+            id: materia_label
+            text: "Temario"
+            font_size: '24sp'
             size_hint_y: None
-            height: dp(50)
-            spacing: dp(10)
-            TextInput:
-                id: user_input
-                hint_text: 'Escribe tu mensaje aquí...'
-                multiline: False
-                on_text_validate: root.enviar_mensaje()
-            Button:
-                text: 'Enviar'
-                size_hint_x: None
-                width: dp(80)
-                on_press: root.enviar_mensaje()
+            height: 50
 
-<MensajeItem@BoxLayout>:
-    texto: ''
-    size_hint_y: None
-    height: dp(70)
-    padding: dp(10)
-    Label:
-        text: root.texto
-        text_size: self.width, None
-        size_hint_y: None
-        height: self.texture_size[1]
+        ScrollView:
+            size_hint: (1, 1)
+            BoxLayout:
+                id: temas_layout
+                orientation: 'vertical'
+                size_hint_y: None
+                height: self.minimum_height
+                spacing: 10
+                padding: [10, 10]
 
-<InicioScreen>:
-    name: 'inicio'
-    BoxLayout:
-        orientation: 'vertical'
-        padding: dp(50)
-        spacing: dp(10)
         Button:
-            text: 'Ir a Chatbot'
-            on_press: root.ir_a_chatbot()
-        Button:
-            text: 'Ir a Registro'
-            on_press: root.ir_a_registro()
-
-<RegistroScreen>:
-    name: 'registro'
-    BoxLayout:
-        orientation: 'vertical'
-        padding: dp(50)
-        spacing: dp(10)
-        Label:
-            text: 'Formulario de Registro'
-        TextInput:
-            hint_text: 'Nombre de Usuario'
-        TextInput:
-            hint_text: 'Correo'
-        TextInput:
-            hint_text: 'Contraseña'
-            password: True
-        Button:
-            text: 'Registrar'
-            on_press: root.registrar_usuario()
-
-<LoginScreen>:
-    name: 'login'
-    BoxLayout:
-        orientation: 'vertical'
-        padding: dp(50)
-        spacing: dp(10)
-        Label:
-            text: 'Iniciar Sesión'
-        TextInput:
-            hint_text: 'Correo o Nombre de Usuario'
-        TextInput:
-            hint_text: 'Contraseña'
-            password: True
-        Button:
-            text: 'Iniciar sesión'
-            on_press: root.iniciar_sesion()
-
-<HistorialScreen>:
-    name: 'historial'
-    BoxLayout:
-        orientation: 'vertical'
-        padding: dp(50)
-        spacing: dp(10)
-        Label:
-            text: 'Historial de Chats'
-        Button:
-            text: 'Ir a Chatbot'
-            on_press: root.ir_a_chatbot()
-
-# Agregar las pantallas al ScreenManager en la clase principal.
-<MyScreenManager>:
-    InicioScreen:
-    ChatbotScreen:
-    RegistroScreen:
-    LoginScreen:
-    HistorialScreen:
-
+            text: "Salir"
+            size_hint: None, None
+            size: 200, 50
+            on_release:
+                app.root.current = 'malla_curricular'
