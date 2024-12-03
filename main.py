@@ -11,13 +11,18 @@ import openai
 from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
 import webbrowser
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
+from reportlab.lib.styles import getSampleStyleSheet
+from reportlab.lib.pagesizes import letter
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
+from reportlab.lib.styles import getSampleStyleSheet
 
 # Conexión a MongoDB Atlas
-client = MongoClient("")  # Reemplaza con tu URI de conexión a MongoDB Atlas
+client = MongoClient("mongodb+srv://")  # Reemplaza con tu URI de conexión a MongoDB Atlas
 db = client["guia_app"]
 
 # Configura tu clave de API de OpenAI
-openai.api_key = ""
+openai.api_key = "xxx"
 
 class InicioScreen(Screen):
     def __init__(self, **kwargs):
@@ -140,26 +145,49 @@ class TemarioScreen(Screen):
     def generar_resumen_pdf(self, instance):
         temas = self.obtener_temas_seleccionados()
         if temas:
-            temas_combinados = "; ".join(temas)
-            resumen = self.generar_resumen_openai(temas_combinados)
-            self.crear_pdf(resumen, "resumen.pdf")
+            temas_contenidos = {}
+            for tema in temas:
+                resumen = self.generar_resumen_openai(tema)
+                temas_contenidos[tema] = resumen
+    
+            self.crear_pdf(temas_contenidos, "resumen.pdf")
         else:
             self.mostrar_resultado("Por favor, selecciona al menos un tema.", "Error")
-
+    
     def generar_guia_pdf(self, instance):
         temas = self.obtener_temas_seleccionados()
         if temas:
-            temas_combinados = "; ".join(temas)
-            guia = self.generar_preguntas_openai(temas_combinados)
-            self.crear_pdf(guia, "guia_estudio.pdf")
+            temas_contenidos = {}
+            for tema in temas:
+                guia = self.generar_preguntas_openai(tema)
+                temas_contenidos[tema] = guia
+    
+            self.crear_pdf(temas_contenidos, "guia_estudio.pdf")
         else:
             self.mostrar_resultado("Por favor, selecciona al menos un tema.", "Error")
 
-    def crear_pdf(self, contenido, nombre_archivo):
-        c = canvas.Canvas(nombre_archivo, pagesize=letter)
-        c.drawString(100, 750, "Guía de Estudio")
-        c.drawString(100, 730, contenido)
-        c.save()
+    def crear_pdf(self, temas_contenidos, nombre_archivo):
+        # Crear el archivo PDF
+        doc = SimpleDocTemplate(nombre_archivo, pagesize=letter)
+        styles = getSampleStyleSheet()
+        flowables = []
+    
+        # Recorrer cada tema y añadir título y contenido por separado
+        for tema, contenido in temas_contenidos.items():
+            # Añadir título del tema
+            titulo = Paragraph(tema, styles['Heading2'])
+            flowables.append(titulo)
+            flowables.append(Spacer(1, 12))  # Espacio entre el título y el contenido
+    
+            # Añadir contenido (resumen o guía de estudio)
+            parrafo = Paragraph(contenido, styles['Normal'])
+            flowables.append(parrafo)
+            flowables.append(Spacer(1, 24))  # Espacio entre temas
+    
+        # Construir el PDF
+        doc.build(flowables)
+    
+        # Imprimir mensaje indicando que se generó el PDF
         print(f"PDF generado: {nombre_archivo}")
 
     def redirigir_al_bot(self, instance):
@@ -248,6 +276,9 @@ class MainApp(App):
         sm.add_widget(TemaDetalleScreen(name='tema_detalle'))
         return sm
 
+
+if __name__ == "__main__":
+    MainApp().run()
 
 if __name__ == "__main__":
     MainApp().run()
